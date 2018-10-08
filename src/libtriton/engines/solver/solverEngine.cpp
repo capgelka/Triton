@@ -81,6 +81,7 @@ namespace triton {
       std::map<triton::uint32, SolverModel> SolverEngine::getModel(const triton::ast::SharedAbstractNode& node) const {
         if (!this->solver)
           return std::map<triton::uint32, SolverModel>{};
+        printf("%s\n", "DEBUG");
         return this->solver->getModel(node);
       }
 

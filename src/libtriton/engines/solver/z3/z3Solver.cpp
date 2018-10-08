@@ -8,6 +8,7 @@
 #include <z3++.h>                        // for expr, model, solver, expr_ve...
 #include <z3_api.h>                      // for Z3_ast, _Z3_ast
 #include <string>                        // for string
+#include <iostream>
 
 #include <triton/astContext.hpp>         // for AstContext
 #include <triton/exceptions.hpp>         // for SolverEngine
@@ -143,16 +144,23 @@ namespace triton {
           if (onode->isLogical() == false)
             throw triton::exceptions::SolverEngine("Z3Solver::getModels(): Must be a logical node.");
 
+          printf("%s\n", "before convert");
           z3::expr      expr = z3Ast.convert(onode);
+          printf("%s\n", "after convert");
           z3::context&  ctx  = expr.ctx();
           z3::solver    solver(ctx);
 
+          printf("%s\n", "solving");
+          std::cout << expr.to_string();
+          // std::cout << ctx;
+          // std::cout << solver;
           /* Create a solver and add the expression */
+          printf("%s\n", "solving...");
           solver.add(expr);
 
           /* Check if it is sat */
           while (solver.check() == z3::sat && limit >= 1) {
-
+            printf("%s\n", "we are working!");
             /* Get model */
             z3::model m = solver.get_model();
 
@@ -240,6 +248,7 @@ namespace triton {
         std::map<triton::uint32, SolverModel> ret;
         std::list<std::map<triton::uint32, SolverModel>> allModels;
 
+        printf("%s\n", "call Z3 solver getmodel");
         allModels = this->getModels(node, 1);
         if (allModels.size() > 0)
           ret = allModels.front();

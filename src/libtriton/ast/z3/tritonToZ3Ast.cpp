@@ -5,9 +5,11 @@
 **  This program is under the terms of the BSD License.
 */
 
+#include <triton/astPythonRepresentation.hpp>
 #include <triton/cpuSize.hpp>
 #include <triton/exceptions.hpp>
 #include <triton/tritonToZ3Ast.hpp>
+#include <iostream>
 
 
 
@@ -46,6 +48,13 @@ namespace triton {
       if (node == nullptr)
         throw triton::exceptions::AstTranslations("TritonToZ3Ast::convert(): node cannot be null.");
 
+      // printf("Node type: %d\n", node->getKind());
+      // std::stringstream str_stream;
+      // triton::ast::representations::AstPythonRepresentation().print(
+      //   str_stream,
+      //   &(*node)
+      // );
+      // printf("%s\n", str_stream.str().c_str());
       switch (node->getKind()) {
         case BVADD_NODE:
           return to_expr(this->context, Z3_mk_bvadd(this->context, this->convert(node->getChildren()[0]), this->convert(node->getChildren()[1])));
